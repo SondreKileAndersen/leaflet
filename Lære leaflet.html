@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My first map</title>
+    <meta name="viewport" content="width=device-width">
+    <!--This load a css file for the map-->
+    <!--If you want to know more about stylesheeets go to: https://www.w3schools.com/css/ -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <!--This loads the Leaflet javascript library-->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+
+    <style>
+
+        #mapid { height: 400px; }
+
+    </style>
+</head>
+<body>
+
+    <h1>Mitt kart</h1>
+    <p>Paragraf.</p>
+
+    <div id="mapid"></div>
+    
+    <script>
+            //When coding with leaflet 'L' refers to the leaflet mapping library
+            //This defines the map with a mapid that binds it to the div element above.
+            //It also runs the setView method of the new map with parameters for lat, lng and zoom level
+            let mymap = L.map('mapid').setView([51.5, -0.09], 13);
+
+            //This sets the tiles to load for the maps tilelayer       
+         
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1Ijoia2FydGdhdXRlIiwiYSI6ImNqa2pveXh1ZjAwejczcXBoenA2cmJqdG8ifQ.Vt2sMXAar33p6wJJeVtpFQ'
+            }).addTo(mymap);
+          
+            //punkt markør
+            var marker = L.marker([51.5, -0.12]).addTo(mymap);
+            
+            //Sirkel
+            var circle = L.circle([51.508, -0.11], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 500
+            }).addTo(mymap);
+
+            //areal
+            var polygon = L.polygon([
+                [51.509, -0.08],
+                [51.503, -0.06],
+                [51.51, -0.047]
+            ]).addTo(mymap);
+
+            //tekstbobler til objekter
+            marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+            circle.bindPopup("I am a circle.");
+            polygon.bindPopup("I am a polygon.");
+
+            //Bare tekstboble
+            var popup = L.popup()
+            .setLatLng([51.5, -0.09])
+            .setContent("I am a standalone popup.")
+            .openOn(mymap);
+
+            //Advarsel popup i nettleseren når kan klikker på kart
+        //    function onMapClick(e) {
+        //         alert("You clicked the map at " + e.latlng);
+        //        }
+
+        //        mymap.on('click', onMapClick);
+
+        //    var popup = L.popup();
+        
+        //popup som sier hvor du klikket
+        function onMapClick(e) {
+            popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(mymap);
+}
+
+mymap.on('click', onMapClick);
+
+    </script>
+</body>
+</html>
